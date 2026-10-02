@@ -1,0 +1,20 @@
+workflows:
+  android-workflow:
+    name: AetherOS Android Build
+    environment:
+      node: v20
+      java: 17
+    scripts:
+      - name: Extract and build web
+        script: |
+          unzip -q app-store-mirror-main.zip
+          cd app-store-mirror-main
+          npm install
+          npm run build
+      - name: Build Android APK with Native Gradle
+        script: |
+          cd app-store-mirror-main/android-native
+          chmod +x gradlew
+          ./gradlew assembleDebug
+    artifacts:
+      - app-store-mirror-main/android-native/build/outputs/apk/debug/*.apk
